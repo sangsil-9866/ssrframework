@@ -1,0 +1,110 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: ssrframework
+  #  profiles.active: real  # run configuration 에서 local주입해서 사용
+
+  datasource:
+    hikari:
+      poolName: HikariCP
+      connectionTimeout: 10000 # 10초를 뜻함. 클라이언트가 pool에 connection을 요청하는데 기다리는 최대시간
+      connection-init-sql: SELECT 1
+      maximum-pool-size: 10 # 유휴 및 사용중인 connection을 포함하여 풀에 보관가능한 최대 커넥션 개수
+      max-lifetime: 1800000 # 30분을 뜻함. connection의 최대 유지 시간을 설정
+      readOnly: false # pool에서 얻은 connection이 기본적으로 readOnly인지 지정하는 설정, 데이터베이스가 readOnly 속성을 지원할 경우에만 사용가능
+      validation-timeout: 2000
+      minimum-idle: 10 # 연결 풀에서 HikariCP가 유지 관리하는 최소 유휴 연결 수
+
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/dbname
+    username: dbuser
+    password: dbpassword
+
+  jpa:
+    open-in-view: false
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update   #create, update, validate, none, create-drop
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl   # 카멜이 언더바로 변경되는거 막기
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl   # 쿼리중 필드가 지정한대로 하도록(대소문자 구분하는 DB의 경우 완전 필요)
+    defer-datasource-initialization: true	# sql 파일이 hibernate 초기화 이후 동작하게 하기 위한 옵션
+
+    p6spy:
+      enable-logging: true   # JDBC 이벤트 로깅을 위한 P6LogFactory 등록
+      multiline: true   # com.p6spy.engine.spy.appender.MultiLineFormat 사용 (SingleLineFormat 대신)
+      logging: slf4j   # 기본 리스너들을 위한 로깅 사용 [slf4j, sysout, file, custom]
+      # 실제 값으로 '?'를 대체한 효과적인 SQL 문자열을 추적 시스템에 보고
+      # 참고: 이 설정은 로깅 메시지에 영향을 주지 않음
+      tracing:
+        include-parameter-values: true
+
+  thymeleaf:
+    prefix: classpath:/templates/        # 템플릿 경로 (기본값)
+    suffix: .html                        # 템플릿 파일 확장자
+    mode: HTML                          # HTML, XML, TEXT 등 렌더링 모드
+    encoding: UTF-8                      # 인코딩
+    cache: false                         # 개발 시 캐시 끄기 (수정 즉시 반영)
+    check-template-location: true        # 템플릿 위치 확인
+
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  devtools:
+    restart:
+      enabled: true
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+  messages:
+    basename: messages/message,messages/validation
+    encoding: UTF-8
+
+  servlet:
+    multipart:
+      maxFileSize: 10MB # 파일 하나의 최대 크기
+      maxRequestSize: 30MB  # 한 번에 최대 업로드 가능 용량
+
+# MyBatis 설정 정보
+mybatis:
+  config-location: classpath:mybatis-config.xml # mybatis설정
+  mapper-locations: classpath:mappers/**/*.xml # mapper경로와 파일 패턴 지정
+  type-aliases-package: com.sangsil.ssrframework
+
+logging:
+  level:
+    root: info
+    com.sangsil.ssrframework: debug
+    org.springframework: info
+    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: ERROR
+    org.thymeleaf: DEBUG
+
+custom:
+  format:
+    date: yyyy-MM-dd
+    dateStr: yyyyMMdd
+    datetime: yyyy-MM-dd HH:mm:ss.SS
+    datetimeStr: yyyyMMddHHmmss
+
+  # 파일암호화
+  jasypt:
+    encryptor:
+      key: sil
+
+  file:
+    board:
+#      dir: /Users/Shared/app/jjjmpm/upload
+      dir: C:\usr\app\jjjmpm\upload
+      path: /board

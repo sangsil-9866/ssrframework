@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+  <meta charset="UTF-8">
+  <title th:replace="${title} ?: '기본타이틀'">Default Title</title>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+
+  <script>
+    // 모든 htmx 요청에 CSRF 헤더 자동 추가
+    document.addEventListener('htmx:configRequest', (e) => {
+      const token  = document.querySelector('meta[name="_csrf"]').content;
+      const header = document.querySelector('meta[name="_csrf_header"]').content;
+      e.detail.headers[header] = token; // 예: X-CSRF-TOKEN
+    });
+  </script>
+</head>
+</html>

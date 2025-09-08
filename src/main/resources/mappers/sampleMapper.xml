@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sangsil.ssrframework.domain.sample.mapper.SampleMapper">
+
+    <select id="findUserAll" resultType="com.sangsil.ssrframework.domain.user.dto.UserDto$Response">
+        select
+            id,
+            username,
+            password,
+            name,
+            email,
+            role,
+            joined_at as joinedAt,
+            signed_at as signedAt,
+            enabled,
+            created_by as createdBy,
+            created_at as createdAt,
+            modified_by as modifiedBy,
+            modified_at as modifiedAt
+        from user
+    </select>
+
+</mapper>

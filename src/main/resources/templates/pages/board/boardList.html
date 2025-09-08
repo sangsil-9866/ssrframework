@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+
+<body>
+<div layout:fragment="content">
+    <h2>게시판 목록</h2>
+
+    <!-- 검색 영역 -->
+    <form th:action="@{/board}" method="get" style="margin-bottom: 20px;">
+        <input type="text" name="keyword" placeholder="검색어를 입력하세요" th:value="${keyword}">
+        <button type="submit">검색</button>
+    </form>
+
+    <!-- 게시판 리스트 테이블 -->
+    <table border="1" width="100%" style="border-collapse: collapse;">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>등록일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board, iterStat : ${boards}">
+            <td th:text="${iterStat.index + 1}"></td>
+            <td>
+                <a th:href="@{/board/{id}(id=${board.id})}"
+                   th:text="${board.title}">게시글 제목</a>
+            </td>
+            <td th:text="${board.createdBy}"></td>
+            <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(boards)}">
+            <td colspan="4">등록된 게시글이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 등록 버튼 -->
+    <div style="margin-top: 20px; text-align: right;">
+        <a th:href="@{/board/create}">
+            <button type="button">등록</button>
+        </a>
+    </div>
+</div>>
+</body>
+</html>
