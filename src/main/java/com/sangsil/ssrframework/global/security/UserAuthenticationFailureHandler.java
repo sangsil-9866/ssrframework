@@ -1,6 +1,8 @@
 package com.sangsil.ssrframework.global.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sangsil.ssrframework.global.response.ApiResponseFail;
+import com.sangsil.ssrframework.global.response.ResponseCode;
 import com.sangsil.ssrframework.global.util.UtilMessage;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,27 +29,29 @@ public class UserAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
         this.utilMessage = utilMessage;
     }
 
-    public void onAuthenticationFailure(final HttpServletRequest request, final HttpServletResponse response, final AuthenticationException exception) throws IOException, ServletException {
+    public void onAuthenticationFailure(final HttpServletRequest request,
+                                        final HttpServletResponse response,
+                                        final AuthenticationException exception) throws IOException, ServletException {
 
         log.debug("onAuthenticationFailure 로그인 실패");
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
         String errorMsg = "로그인에 실패했습니다.";
+        ResponseCode responseCode = ResponseCode.LOGIN_FAIL; // 적절한 응답 코드 사용
 
-        if(exception instanceof BadCredentialsException) {
+        if (exception instanceof BadCredentialsException) {
             errorMsg = utilMessage.getMessage("login.fail");
-        } else if(exception instanceof InternalAuthenticationServiceException){
+        } else if (exception instanceof InternalAuthenticationServiceException) {
             errorMsg = utilMessage.getMessage("exception.valid.anotation");
         }
 
-        Map<String, Object> responseData  = new HashMap<>();
-        responseData.put("message", errorMsg);
+        ApiResponseFail<?> apiResponse = ApiResponseFail.fail(responseCode, errorMsg);
 
-        response.getWriter().write(new ObjectMapper().writeValueAsString(responseData));
+        String jsonResponse = new ObjectMapper().writeValueAsString(apiResponse);
+        response.getWriter().write(jsonResponse);
     }
 
 }

@@ -88,6 +88,7 @@ logging:
     root: info
     com.sangsil.ssrframework: debug
     org.springframework: info
+    org.springframework.web.servlet.resource: ERROR
     org.springframework.web.servlet.resource.ResourceHttpRequestHandler: ERROR
     org.thymeleaf: DEBUG
 

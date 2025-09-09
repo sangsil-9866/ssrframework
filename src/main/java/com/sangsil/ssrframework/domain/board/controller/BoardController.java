@@ -29,15 +29,24 @@ public class BoardController {
 
     /**
      * 게시판 목록
-     * @param search
      * @return
      */
     @GetMapping
-    public String boardList(Model model, BoardDto.Search search) {
+    public String boardList() {return "pages/board/boardList";}
+
+    /**
+     * 게시판목록 fragment
+     * @param model
+     * @param search
+     * @return
+     */
+    @GetMapping(path = "/fragment")
+    public String boardListFragment(Model model, BoardDto.Search search) {
         Page<BoardDto.Response> boards = boardService.boardList(search);
         model.addAttribute("boards", boards);
-        return "pages/board/boardList";
+        return "pages/board/boardListFragment :: boardListFragment";
     }
+
 
     /**
      * 게시판 상세
@@ -56,9 +65,7 @@ public class BoardController {
      * @return
      */
     @GetMapping("/create")
-    public String createForm() {
-        return "pages/board/boardCreate";
-    }
+    public String createForm() {return "pages/board/boardCreate";}
 
 
     /**

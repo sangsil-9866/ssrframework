@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">사이트 이름</title>
+    <title layout:title-pattern="실's">사이트 이름</title>
     <!-- 공통 스타일, 스크립트 등 -->
 </head>
 <body>
@@ -15,6 +15,8 @@
     <!-- 각 페이지의 내용이 여기에 들어갑니다 -->
 </div>
 
+<!-- script -->
+<!--<div th:replace="~{layout/fragments/scripts :: scripts}"></div>-->
 <!-- 푸터 -->
 <div th:replace="~{layout/fragments/footer :: footer}"></div>
 </body>

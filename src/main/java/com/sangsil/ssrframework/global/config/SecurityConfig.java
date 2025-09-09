@@ -52,7 +52,6 @@ public class SecurityConfig {
 				// JSP 내부 경로는 보호 대상에서 제외
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(
-								"/",
 								"/auth/login",
 								"/auth/signup",
 								"/css/**",
