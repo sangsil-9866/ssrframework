@@ -8,10 +8,8 @@
 
     <!-- 검색 폼 -->
     <div class="search-container">
-        <form id="searchForm">
-            <input type="text" name="keyword" placeholder="제목 검색...">
-            <input type="hidden" name="id">
-
+        <form name="form-main">
+            <input type="text" name="keyword" th:value="${paramDto.keyword}"  placeholder="검색어 입력">
             <button type="submit">검색</button>
         </form>
     </div>
@@ -37,73 +35,51 @@
             <button type="button">등록</button>
         </a>
     </div>
+
+    <form name="form-detail"></form>
+
 </div>
 
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        const searchForm = document.getElementById('searchForm');
+<th:block layout:fragment="script"><script th:inline="javascript">
+    const form = document.forms['form-main'];
 
-        // 검색
-        searchForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            loadBoardList();
-        });
+    // 페이지 로드 시
+    document.addEventListener('DOMContentLoaded', () => {
 
-        // 데이타로드
-        async function loadBoardList() {
-            try {
-                const formData = new FormData(searchForm);
-                const queryString = new URLSearchParams(formData).toString();
+        loadBoardList();
+    });
 
-                const response = await fetch(`/board/fragment?${queryString}`, {
-                    method: 'GET',
-                    headers: { 'Accept': 'text/html' }
-                });
+    // 검색
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        loadBoardList();
+    });
 
-                if (!response.ok) {
-                    throw new Error('네트워크 오류');
-                }
+    // 데이타로드
+    async function loadBoardList() {
+        try {
+            const formData = new FormData(form);
+            const queryString = new URLSearchParams(formData).toString();
 
-                document.querySelector('[data-area="dataList"]').innerHTML = await response.text();
-            } catch (error) {
-                console.error('Error:', error);
+            const response = await fetch(`/board/fragment?${queryString}`, {
+                method: 'GET',
+                headers: { 'Accept': 'text/html' }
+            });
+
+            if (!response.ok) {
+                throw new Error('네트워크 오류');
             }
+
+            document.querySelector('[data-area="dataList"]').innerHTML = await response.text();
+        } catch (error) {
+            console.error('Error:', error);
         }
+    }
 
-        // 상세페이지 이동 함수
-        function goDetail(event, id) {
-            event.preventDefault();
-
-            // 현재 검색 조건을 세션 스토리지에 저장
-            const formData = new FormData(searchForm);
-            const searchParams = Object.fromEntries(formData.entries());
-            sessionStorage.setItem('boardSearchParams', JSON.stringify(searchParams));
-
-            // 상세 페이지로 이동
-            window.location.href = `/board/${id}`;
-        }
-
-        // 페이지 로드 시 저장된 검색 조건이 있다면 복원
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedParams = sessionStorage.getItem('boardSearchParams');
-            if (savedParams) {
-                const searchParams = JSON.parse(savedParams);
-
-                // 폼에 저장된 값 복원
-                Object.entries(searchParams).forEach(([key, value]) => {
-                    const input = searchForm.querySelector(`[name="${key}"]`);
-                    if (input) input.value = value;
-                });
-
-                // 목록 로드
-                loadBoardList();
-
-                // 세션 스토리지 클리어 (선택사항)
-                // sessionStorage.removeItem('boardSearchParams');
-            } else {
-                loadBoardList();
-            }
-        });
-    </script>
-</th:block>
+    // 상세페이지 이동 함수
+    function goDetail(id) {
+        form.action = `/board/${id}`;
+        form.submit();
+    }
+</script></th:block>
 </html>

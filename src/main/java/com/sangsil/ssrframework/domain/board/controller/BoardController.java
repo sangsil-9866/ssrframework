@@ -32,7 +32,8 @@ public class BoardController {
      * @return
      */
     @GetMapping
-    public String boardList() {
+    public String boardList(Model model, BoardDto.Search search) {
+        model.addAttribute("paramDto", search);
         return "pages/board/boardList";
     }
 
@@ -56,9 +57,10 @@ public class BoardController {
      * @return
      */
     @GetMapping("/{id}")
-    public String boardDetail(Model model, @PathVariable String id) {
+    public String boardDetail(Model model, BoardDto.Search search, @PathVariable String id) {
         BoardDto.Response board = boardService.boardDetail(id);
         model.addAttribute("board", board);
+        model.addAttribute("paramDto", search);
         return "pages/board/boardDetail";
     }
 
