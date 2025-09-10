@@ -11,7 +11,7 @@
             <a href="#"
                th:data-id="${board.id}"
                th:text="${board.title}"
-               onclick="goDetail(this.getAttribute('data-id'))">게시글 제목</a>
+               onclick="goDetail(this.dataset.id)">게시글 제목</a>
 
         </td>
         <td th:text="${board.createdBy}"></td>

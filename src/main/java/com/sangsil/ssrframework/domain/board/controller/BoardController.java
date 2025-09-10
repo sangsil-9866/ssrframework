@@ -50,7 +50,6 @@ public class BoardController {
         return "pages/board/boardListFragment :: boardListFragment";
     }
 
-
     /**
      * 게시판 상세
      * @param id
@@ -73,7 +72,6 @@ public class BoardController {
         log.info("createForm");
         return "pages/board/boardCreate";
     }
-
 
     /**
      * 게시판 등록
@@ -99,9 +97,10 @@ public class BoardController {
      * @return
      */
     @GetMapping("/{id}/modify")
-    public String boardModifyForm(Model model, @PathVariable String id) {
+    public String boardModifyForm(Model model, BoardDto.Search search, @PathVariable String id) {
         BoardDto.Response board = boardService.boardDetail(id);
         model.addAttribute("board", board);
+        model.addAttribute("paramDto", search);
         return "pages/board/boardModify";
     }
 
@@ -129,6 +128,7 @@ public class BoardController {
      * @return
      * @throws IOException
      */
+    @ResponseBody
     @DeleteMapping("/{id}")
     public ResponseEntity<BoardDto.Response> boardDelete(@PathVariable String id) throws IOException {
         boardService.boardDelete(id);
