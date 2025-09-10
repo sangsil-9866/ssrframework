@@ -18,7 +18,7 @@
 
     <div style="margin-top: 10px;" th:each="attachment : ${board.attachments}">
         <strong>첨부파일:</strong>
-        <a th:href="@{/board/download/{id}(id=${attachment.id})}" th:text="${attachment.orgFileName}">파일 다운로드</a>
+        <a th:href="@{/attachment/download/{id}(id=${attachment.id})}"th:text="${attachment.orgFileName}">파일 다운로드</a>
     </div>
 
     <!-- 하단 버튼 -->

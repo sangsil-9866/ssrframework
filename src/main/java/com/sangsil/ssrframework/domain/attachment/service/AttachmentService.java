@@ -171,4 +171,17 @@ public class AttachmentService {
             }
         });
     }
+
+    /**
+     * 파일 저장 경로 반환
+     * @param parentType
+     * @return
+     */
+    public String getFileDir(String parentType) {
+        if (ParentType.BOARD.name().equals(parentType)) {
+            return FILE_BOARD_DIR;
+        }
+        return FILE_BOARD_DIR; // 기본값
+    }
+
 }
