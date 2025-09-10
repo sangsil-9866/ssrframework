@@ -32,7 +32,11 @@ public class BoardController {
      * @return
      */
     @GetMapping
-    public String boardList() {return "pages/board/boardList";}
+    public String boardList(Model model, BoardDto.Search search) {
+        Page<BoardDto.Response> boards = boardService.boardList(search);
+        model.addAttribute("boards", boards);
+        return "pages/board/boardList";
+    }
 
     /**
      * 게시판목록 fragment
@@ -65,7 +69,10 @@ public class BoardController {
      * @return
      */
     @GetMapping("/create")
-    public String createForm() {return "pages/board/boardCreate";}
+    public String createForm() {
+        log.info("createForm");
+        return "pages/board/boardCreate";
+    }
 
 
     /**
@@ -75,6 +82,7 @@ public class BoardController {
      * @return
      * @throws IOException
      */
+    @ResponseBody
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BoardDto.Response> boardCreate(
             @Valid BoardDto.CreateRequest request,
@@ -105,6 +113,7 @@ public class BoardController {
      * @return
      * @throws IOException
      */
+    @ResponseBody
     @PostMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BoardDto.Response> boardModify(@PathVariable String id
         , @Valid BoardDto.ModifyRequest request

@@ -3,14 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base}">
 
-<body>
 <div layout:fragment="content">
     <h2>게시판 목록</h2>
 
     <!-- 검색 폼 -->
     <div class="search-container">
-        <form id="searchForm">
-            <input type="text" name="searchValue" placeholder="제목 검색..." />
+        <form id="searchForm" method="get" action="/board">
+            <input type="text" name="keyword" placeholder="제목 검색..." />
             <button type="submit">검색</button>
         </form>
     </div>
@@ -25,13 +24,21 @@
             <th>등록일</th>
         </tr>
         </thead>
-        <tbody data-area="dataList">
-        <!-- 초기 데이터 -->
-        <th:block th:replace="~{pages/board/boardListFragment :: boardListFragment}">
-        </th:block>
+        <tbody id="dataList">
+        <!-- 페이지 로드시 fetch로 채움 -->
+            <tr th:each="board, iterStat : ${boards}">
+                <td th:text="${iterStat.index + 1}"></td>
+                <td>
+                    <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">게시글 제목</a>
+                </td>
+                <td th:text="${board.createdBy}"></td>
+                <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(boards)}">
+                <td colspan="4">등록된 게시글이 없습니다.</td>
+            </tr>
         </tbody>
     </table>
-
 
     <!-- 등록 버튼 -->
     <div style="margin-top: 20px; text-align: right;">
@@ -39,46 +46,9 @@
             <button type="button">등록</button>
         </a>
     </div>
-</div>>
-
+</div>
 
 <script>
-    /**
-     * 1. 초기 페이지 로드 시에는 전체 페이지가 렌더링됩니다.
-     * 2. 검색 시에는 Thymeleaf로 렌더링된 HTML 프래그먼트만 받아와서 테이블 내용을 교체합니다.
-     * 3. 서버에서 Thymeleaf 템플릿 처리를 하기 때문에 클라이언트에서 데이터를 가공할 필요가 없습니다.
-     */
-    const searchForm = document.getElementById('searchForm');
-    document.addEventListener('DOMContentLoaded', function() {
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            loadBoardList();
-        });
-    });
 
-    async function loadBoardList() {
-        try {
-            const formData = new FormData(searchForm);
-            const queryString = new URLSearchParams(formData).toString();
-
-            const response = await fetch(`/board/list/fragment?${queryString}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'text/html'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const html = await response.text();
-            document.querySelector('[data-area="dataList"]').innerHTML = html;
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
 </script>
-
-</body>
 </html>

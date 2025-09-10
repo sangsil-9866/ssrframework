@@ -50,23 +50,24 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/        # 템플릿 경로 (기본값)
     suffix: .html                        # 템플릿 파일 확장자
-    mode: HTML                          # HTML, XML, TEXT 등 렌더링 모드
+    mode: HTML                           # HTML, XML, TEXT 등 렌더링 모드
     encoding: UTF-8                      # 인코딩
     cache: false                         # 개발 시 캐시 끄기 (수정 즉시 반영)
     check-template-location: true        # 템플릿 위치 확인
 
   mvc:
+    contentnegotiation:
+      favor-parameter: true
+    pathmatch:
+      matching-strategy: ant_path_matcher
     hiddenmethod:
       filter:
-        enabled: true
-
-  devtools:
-    restart:
-      enabled: true
+        enabled: true # form에서 delete, put과 같은 메서드를 사용가능하게 해준다
 
   web:
     resources:
       static-locations: classpath:/static/
+      add-mappings: true  # 정적 리소스 핸들링 활성화
 
   messages:
     basename: messages/message,messages/validation
@@ -88,9 +89,7 @@ logging:
     root: info
     com.sangsil.ssrframework: debug
     org.springframework: info
-    org.springframework.web.servlet.resource: ERROR
-    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: ERROR
-    org.thymeleaf: DEBUG
+    org.springframework.web.servlet.resource: WARN  # 크롬 dev 모드 오류 넘김
 
 custom:
   format:
@@ -107,5 +106,5 @@ custom:
   file:
     board:
 #      dir: /Users/Shared/app/jjjmpm/upload
-      dir: C:\usr\app\jjjmpm\upload
+      dir: C:\usr\app\ssrframework\upload
       path: /board
