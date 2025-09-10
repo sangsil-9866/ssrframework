@@ -32,9 +32,7 @@ public class BoardController {
      * @return
      */
     @GetMapping
-    public String boardList(Model model, BoardDto.Search search) {
-        Page<BoardDto.Response> boards = boardService.boardList(search);
-        model.addAttribute("boards", boards);
+    public String boardList() {
         return "pages/board/boardList";
     }
 

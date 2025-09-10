@@ -8,7 +8,7 @@
 
     <!-- 검색 폼 -->
     <div class="search-container">
-        <form id="searchForm" method="get" action="/board">
+        <form id="searchForm">
             <input type="text" name="keyword" placeholder="제목 검색..." />
             <button type="submit">검색</button>
         </form>
@@ -24,19 +24,8 @@
             <th>등록일</th>
         </tr>
         </thead>
-        <tbody id="dataList">
+        <tbody data-area="dataList">
         <!-- 페이지 로드시 fetch로 채움 -->
-            <tr th:each="board, iterStat : ${boards}">
-                <td th:text="${iterStat.index + 1}"></td>
-                <td>
-                    <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">게시글 제목</a>
-                </td>
-                <td th:text="${board.createdBy}"></td>
-                <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}"></td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(boards)}">
-                <td colspan="4">등록된 게시글이 없습니다.</td>
-            </tr>
         </tbody>
     </table>
 
@@ -48,7 +37,38 @@
     </div>
 </div>
 
-<script>
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    const searchForm = document.getElementById('searchForm');
 
-</script>
+    // 2. 검색 시 데이터 교체
+    searchForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        loadBoardList();
+    });
+
+    async function loadBoardList() {
+        console.log('loadBoardList');
+        try {
+            const formData = new FormData(searchForm);
+            const queryString = new URLSearchParams(formData).toString();
+
+            const response = await fetch(`/board/fragment?${queryString}`, {
+                method: 'GET',
+                headers: { 'Accept': 'text/html' }
+            });
+
+            if (!response.ok) {
+                throw new Error('네트워크 오류');
+            }
+
+            const html = await response.text();
+            document.querySelector('[data-area="dataList"]').innerHTML = html;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    document.addEventListener('DOMContentLoaded', () => loadBoardList());
+    </script>
+</th:block>
 </html>

@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="boardListFragment">
+    <tr th:if="${boards != null and #lists.isEmpty(boards.content)}">
+    <td colspan="4">등록된 게시글이 없습니다.</td>
+    </tr>
     <tr th:each="board, iterStat : ${boards}">
         <td th:text="${iterStat.index + 1}"></td>
         <td>
@@ -9,9 +12,6 @@
         </td>
         <td th:text="${board.createdBy}"></td>
         <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}"></td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(boards)}">
-        <td colspan="4">등록된 게시글이 없습니다.</td>
     </tr>
 </th:block>
 
