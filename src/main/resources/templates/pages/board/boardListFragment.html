@@ -8,7 +8,11 @@
     <tr th:each="board, iterStat : ${boards}">
         <td th:text="${iterStat.index + 1}"></td>
         <td>
-            <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">게시글 제목</a>
+            <a href="#"
+               th:data-id="${board.id}"
+               th:text="${board.title}"
+               onclick="goDetail(event, this.getAttribute('data-id'))">게시글 제목</a>
+
         </td>
         <td th:text="${board.createdBy}"></td>
         <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}"></td>
