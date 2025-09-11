@@ -69,7 +69,6 @@ public class BoardController {
      */
     @GetMapping("/create")
     public String createForm() {
-        log.info("createForm");
         return "pages/board/boardCreate";
     }
 

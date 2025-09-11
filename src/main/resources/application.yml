@@ -85,11 +85,23 @@ mybatis:
   type-aliases-package: com.sangsil.ssrframework
 
 logging:
-  level:
-    root: info
-    com.sangsil.ssrframework: debug
-    org.springframework: info
-    org.springframework.web.servlet.resource: WARN  # 크롬 dev 모드 오류 넘김
+  file:
+    path: /Users/Shared/ssrframework/logs
+
+# S: actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,loggers"
+  endpoint:
+    loggers:
+      enabled: true
+  # Spring Security 설정 추가
+spring.security.basic.enabled: true
+spring.security.user.name: admin     # actuator 접근용 계정
+spring.security.user.password: admin     # actuator 접근용 비밀번호
+# E: actuator 설정
 
 custom:
   format:
@@ -105,6 +117,5 @@ custom:
 
   file:
     board:
-#      dir: /Users/Shared/app/jjjmpm/upload
-      dir: C:\usr\app\ssrframework\upload
+      dir: /Users/Shared/ssrframework/upload
       path: /board

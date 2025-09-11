@@ -17,10 +17,27 @@ public class AuthController {
 
     private final UserService userService;
 
+    /**
+     * 로그인화면
+     * @return
+     */
     @GetMapping("/auth/login")
     public String loginForm() {
-        log.info("loginForm");
+        log.warn("WARN: loginForm");
+        log.info("INFO: loginForm");
+        log.debug("DEBUG: loginForm");
+        log.trace("TRACE: loginForm");
         return "pages/auth/login";
+    }
+
+
+    /**
+     * 회원가입 화면
+     * @return
+     */
+    @GetMapping("/auth/signup")
+    public String signupForm() {
+        return "pages/auth/signup";
     }
 
     /**
@@ -28,7 +45,7 @@ public class AuthController {
      * @param request
      * @return
      */
-    @PostMapping("/signup")
+    @PostMapping("/auth/signup")
     public ResponseEntity<UserDto.Response> signup(@Valid UserDto.CreateRequest request) {
         log.debug(request.toString());
         UserDto.Response response = userService.userCreate(request);

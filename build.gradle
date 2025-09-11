@@ -48,6 +48,9 @@ dependencies {
     // https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect
     implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.4.0")
 
+    // 로그레벨실시간변경
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     // querydsl
     implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"

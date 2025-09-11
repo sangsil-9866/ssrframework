@@ -60,7 +60,8 @@ public class SecurityConfig {
 								"/favicon.ico",
 								"/resources/**",
 								"/static/**",
-								"/.well-known/**"
+								"/.well-known/**",
+								"/actuator/**"	// 록레벨변경
 						).permitAll()
 						.requestMatchers("/admin/**").hasRole("ADMIN")
 						.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
