@@ -47,8 +47,11 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf(Customizer.withDefaults()) // CSRF 기본 활성화
+//				.csrf(Customizer.withDefaults()) // CSRF 기본 활성화
 //				.csrf(AbstractHttpConfigurer::disable)  // AJAX 요청을 위해 CSRF 비활성화
+				.csrf(csrf -> csrf
+						.ignoringRequestMatchers("/actuator/loggers/**") // CSRF 검증 제외
+				)
 				// JSP 내부 경로는 보호 대상에서 제외
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers(

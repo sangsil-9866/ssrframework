@@ -9,6 +9,7 @@
 * jar 배포
 * gradle
 * QueryDsl
+* actuator 서버 로그레벨변경
 
 
 ## 버전정보
